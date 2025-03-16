@@ -11,12 +11,15 @@ const Admin = () => {
   const [responses, setResponses] = useState([]);
   const [loadingResponses, setLoadingResponses] = useState(false);
   const [error, setError] = useState(null);
+  
+  // Check if user has the authorized email
+  const isAuthorized = user?.email === 'david@zapt.ai';
 
   useEffect(() => {
-    if (user) {
+    if (user && isAuthorized) {
       fetchResponses();
     }
-  }, [user]);
+  }, [user, isAuthorized]);
 
   const fetchResponses = async () => {
     try {
@@ -76,6 +79,26 @@ const Admin = () => {
 
   if (!user) {
     return <Navigate to="/login" replace />;
+  }
+  
+  // If the user is not authorized (not david@zapt.ai)
+  if (!isAuthorized) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="bg-white shadow sm:rounded-lg p-6 max-w-md">
+          <h2 className="text-xl font-semibold text-red-600 mb-4">Access Denied</h2>
+          <p className="text-gray-600 mb-4">
+            You do not have permission to access the admin portal. Only authorized administrators can view survey responses.
+          </p>
+          <button
+            onClick={handleSignOut}
+            className="w-full py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 cursor-pointer"
+          >
+            Sign Out
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (

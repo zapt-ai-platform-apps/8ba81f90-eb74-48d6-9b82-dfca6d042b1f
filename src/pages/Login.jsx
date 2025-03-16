@@ -25,7 +25,10 @@ const Login = () => {
   return (
     <Layout>
       <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6 md:p-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6 text-center">Admin Login</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-4 text-center">Admin Login</h1>
+        <p className="text-sm text-gray-600 mb-6 text-center">
+          Note: Admin access is restricted to authorized personnel only (david@zapt.ai)
+        </p>
         <AuthForm />
       </div>
     </Layout>

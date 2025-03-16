@@ -7,7 +7,7 @@ A survey application for collecting insights about no-code app development. The 
 - Multi-step survey form with validation
 - Secure data storage in CockroachDB
 - Admin authentication with Supabase
-- Protected admin dashboard to view all responses
+- Protected admin dashboard to view all responses (restricted to david@zapt.ai)
 - Mobile-responsive design with Tailwind CSS
 
 ## Technical Details
@@ -32,5 +32,12 @@ The application is built with:
 
 To access the admin dashboard:
 1. Navigate to `/login`
-2. Sign in with authorized credentials
+2. Sign in with authorized credentials (david@zapt.ai)
 3. View submitted survey responses at `/admin`
+
+## Survey Access
+
+The survey form is accessible to all users without login requirements:
+1. Navigate to the home page `/`
+2. Complete the multi-step survey form
+3. Submit to save responses to the database
