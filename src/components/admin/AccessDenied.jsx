@@ -14,7 +14,7 @@ const AccessDenied = ({ onSignOut }) => {
         </div>
         
         <p className="text-gray-600 mb-6">
-          You do not have permission to access the admin portal. Only authorized administrators (david@zapt.ai) can view survey responses.
+          You do not have permission to access the admin portal. Only authorized administrators can view survey responses.
         </p>
         
         <button

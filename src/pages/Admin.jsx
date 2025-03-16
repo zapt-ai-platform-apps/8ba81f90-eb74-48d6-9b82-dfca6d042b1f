@@ -13,7 +13,8 @@ const Admin = () => {
   const [error, setError] = useState(null);
   
   // Check if user has the authorized email
-  const isAuthorized = user?.email === 'david@zapt.ai';
+  const authorizedEmails = ['david@zapt.ai', 'david@mapt.events'];
+  const isAuthorized = user?.email && authorizedEmails.includes(user.email);
 
   useEffect(() => {
     if (user && isAuthorized) {
@@ -81,7 +82,7 @@ const Admin = () => {
     return <Navigate to="/login" replace />;
   }
   
-  // If the user is not authorized (not david@zapt.ai)
+  // If the user is not authorized
   if (!isAuthorized) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">

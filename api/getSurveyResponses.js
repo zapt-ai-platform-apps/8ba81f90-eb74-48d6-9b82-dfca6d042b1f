@@ -16,8 +16,9 @@ export default async function handler(req, res) {
     const user = await authenticateUser(req);
     console.log('User authenticated:', user.email);
     
-    // Check if the user is authorized (david@zapt.ai)
-    if (user.email !== 'david@zapt.ai') {
+    // Check if the user is authorized
+    const authorizedEmails = ['david@zapt.ai', 'david@mapt.events'];
+    if (!authorizedEmails.includes(user.email)) {
       console.log('Unauthorized access attempt:', user.email);
       return res.status(403).json({ error: 'Forbidden: You do not have permission to access this resource' });
     }
