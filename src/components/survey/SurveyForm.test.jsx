@@ -1,10 +1,13 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, within } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import SurveyForm from './SurveyForm';
 
 // Mock fetch
 global.fetch = vi.fn();
+
+// Mock window.scrollTo
+global.window.scrollTo = vi.fn();
 
 // Mock navigate
 vi.mock('react-router-dom', async () => {
@@ -25,6 +28,9 @@ describe('SurveyForm', () => {
       ok: true,
       json: async () => ({ success: true, id: 1 }),
     });
+
+    // Reset scrollTo mock
+    window.scrollTo.mockReset();
   });
 
   it('renders the first step of the survey form', () => {
@@ -70,9 +76,9 @@ describe('SurveyForm', () => {
     expect(continueButton.disabled).toBe(false);
   });
 
-  // Add test for yes/no radio button functionality
+  // Updated test with more specific selectors for radio buttons
   it('properly toggles yes/no radio buttons on SurveyStep2', async () => {
-    const { rerender } = render(
+    render(
       <BrowserRouter>
         <SurveyForm />
       </BrowserRouter>
@@ -84,17 +90,23 @@ describe('SurveyForm', () => {
     fireEvent.click(screen.getByLabelText(/Just me/i));
     fireEvent.click(screen.getByRole('button', { name: /Continue/i }));
     
-    // Verify we're on step 2
-    expect(screen.getByText(/Do you need \(or have you ever needed\) to build an app/i)).not.toBeNull();
+    // Verify we're on step 2 by finding the question header
+    const step2Question = screen.getByText(/Do you need \(or have you ever needed\) to build an app/i);
+    expect(step2Question).not.toBeNull();
     
-    // Test the "Yes" option
-    fireEvent.click(screen.getByLabelText(/Yes/i));
+    // Get the container that has the Yes/No options for this specific question
+    const questionContainer = step2Question.closest('div');
+    
+    // Find the Yes radio within this specific question container
+    const yesRadio = within(questionContainer).getByLabelText('Yes');
+    fireEvent.click(yesRadio);
     
     // Check that challenges section appears
     expect(screen.getByText(/what challenges are you facing/i)).not.toBeNull();
     
-    // Test the "No" option
-    fireEvent.click(screen.getByLabelText(/No/i));
+    // Find the No radio within this specific question container
+    const noRadio = within(questionContainer).getByLabelText('No');
+    fireEvent.click(noRadio);
     
     // Check that challenges section disappears
     expect(screen.queryByText(/what challenges are you facing/i)).toBeNull();
