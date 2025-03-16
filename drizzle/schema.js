@@ -1,4 +1,4 @@
-import { pgTable, serial, text, boolean, timestamp, array } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, boolean, timestamp, pgArray } from 'drizzle-orm/pg-core';
 
 export const surveyResponses = pgTable('survey_responses', {
   id: serial('id').primaryKey(),
@@ -8,9 +8,9 @@ export const surveyResponses = pgTable('survey_responses', {
   industryOther: text('industry_other'),
   companySize: text('company_size').notNull(),
   needsApp: boolean('needs_app').notNull(),
-  challenges: array(text('challenges')),
+  challenges: pgArray('challenges', text),
   challengesOther: text('challenges_other'),
-  solutionsUsed: array(text('solutions_used')),
+  solutionsUsed: pgArray('solutions_used', text),
   interestedInNoCode: text('interested_in_no_code').notNull(),
   appType: text('app_type'),
   appTypeOther: text('app_type_other'),
