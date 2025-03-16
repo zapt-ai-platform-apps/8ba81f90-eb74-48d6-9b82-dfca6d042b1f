@@ -3,6 +3,7 @@ import postgres from 'postgres';
 import { surveyResponses } from '../drizzle/schema.js';
 import { authenticateUser } from './_apiUtils.js';
 import Sentry from './_sentry.js';
+import { desc } from 'drizzle-orm';
 
 export default async function handler(req, res) {
   console.log('Received request for survey responses');
@@ -33,7 +34,8 @@ export default async function handler(req, res) {
         
         // Get survey responses
         console.log('Querying database for survey responses...');
-        const results = await db.select().from(surveyResponses).orderBy(surveyResponses.createdAt, { order: 'desc' });
+        // Fixed: Using desc() imported from drizzle-orm instead of { order: 'desc' }
+        const results = await db.select().from(surveyResponses).orderBy(desc(surveyResponses.createdAt));
         
         console.log(`Retrieved ${results.length} survey responses`);
         

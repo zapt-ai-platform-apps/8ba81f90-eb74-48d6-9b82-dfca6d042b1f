@@ -1,11 +1,27 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import AuthForm from '@/components/auth/AuthForm';
 import Layout from '@/components/Layout';
+import { supabase } from '@/supabaseClient';
 
 const Login = () => {
   const { user, loading } = useAuth();
+  const navigate = useNavigate();
+
+  // Additional auth state listener to ensure proper redirection after social login
+  useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        console.log('Login page detected sign in, redirecting to admin');
+        navigate('/admin', { replace: true });
+      }
+    });
+
+    return () => {
+      authListener?.subscription.unsubscribe();
+    };
+  }, [navigate]);
 
   if (loading) {
     return (
