@@ -27,11 +27,16 @@ const Admin = () => {
       setLoadingResponses(true);
       setError(null);
       
+      console.log('Getting Supabase session...');
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
+        console.error('No active session found');
         throw new Error('No active session');
       }
+      
+      console.log('Session found, user:', session.user.email);
+      console.log('Making API request with token:', session.access_token ? 'Token exists' : 'No token!');
       
       const response = await fetch('/api/getSurveyResponses', {
         method: 'GET',
@@ -41,18 +46,21 @@ const Admin = () => {
         },
       });
       
+      console.log('API response status:', response.status);
+      
       if (!response.ok) {
         const errorData = await response.json();
+        console.error('API error response:', errorData);
         throw new Error(errorData.error || 'Failed to fetch survey responses');
       }
       
       const data = await response.json();
-      console.log('Fetched responses:', data);
+      console.log('Fetched responses:', data.length || 'No responses or invalid response');
       setResponses(data);
     } catch (error) {
       console.error('Error fetching responses:', error);
       Sentry.captureException(error);
-      setError('Failed to load survey responses. Please try again.');
+      setError('Failed to load survey responses. Please try again. Error: ' + error.message);
     } finally {
       setLoadingResponses(false);
     }
