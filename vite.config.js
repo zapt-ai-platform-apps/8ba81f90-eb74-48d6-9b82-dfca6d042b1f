@@ -25,5 +25,9 @@ export default defineConfig({
   },
   optimizeDeps: {
     exclude: ['drizzle-orm']
+  },
+  test: {
+    environment: 'jsdom',
+    globals: true
   }
 });
