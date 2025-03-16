@@ -34,11 +34,11 @@ describe('SurveyForm', () => {
       </BrowserRouter>
     );
     
-    // Check if the form title is rendered
-    expect(screen.getByText(/Help Us Improve No-Code App Development!/i)).toBeInTheDocument();
+    // Instead of toBeInTheDocument, check if the element exists
+    expect(screen.getByText(/Help Us Improve No-Code App Development!/i)).not.toBeNull();
     
     // Check if the first question is rendered
-    expect(screen.getByText('What best describes your role?')).toBeInTheDocument();
+    expect(screen.getByText('What best describes your role?')).not.toBeNull();
   });
 
   it('disables the continue button when required fields are not filled', () => {
@@ -48,9 +48,9 @@ describe('SurveyForm', () => {
       </BrowserRouter>
     );
     
-    // The continue button should be disabled initially
+    // Instead of toBeDisabled, check the disabled attribute
     const continueButton = screen.getByRole('button', { name: /Continue/i });
-    expect(continueButton).toBeDisabled();
+    expect(continueButton.disabled).toBe(true);
   });
 
   it('enables the continue button when required fields are filled', () => {
@@ -65,8 +65,8 @@ describe('SurveyForm', () => {
     fireEvent.click(screen.getByLabelText(/SaaS \/ Tech/i));
     fireEvent.click(screen.getByLabelText(/Just me/i));
     
-    // The continue button should be enabled now
+    // Instead of not.toBeDisabled, check the disabled attribute is false
     const continueButton = screen.getByRole('button', { name: /Continue/i });
-    expect(continueButton).not.toBeDisabled();
+    expect(continueButton.disabled).toBe(false);
   });
 });
