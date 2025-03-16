@@ -69,4 +69,34 @@ describe('SurveyForm', () => {
     const continueButton = screen.getByRole('button', { name: /Continue/i });
     expect(continueButton.disabled).toBe(false);
   });
+
+  // Add test for yes/no radio button functionality
+  it('properly toggles yes/no radio buttons on SurveyStep2', async () => {
+    const { rerender } = render(
+      <BrowserRouter>
+        <SurveyForm />
+      </BrowserRouter>
+    );
+    
+    // Complete step 1
+    fireEvent.click(screen.getByLabelText(/Startup Founder/i));
+    fireEvent.click(screen.getByLabelText(/SaaS \/ Tech/i));
+    fireEvent.click(screen.getByLabelText(/Just me/i));
+    fireEvent.click(screen.getByRole('button', { name: /Continue/i }));
+    
+    // Verify we're on step 2
+    expect(screen.getByText(/Do you need \(or have you ever needed\) to build an app/i)).not.toBeNull();
+    
+    // Test the "Yes" option
+    fireEvent.click(screen.getByLabelText(/Yes/i));
+    
+    // Check that challenges section appears
+    expect(screen.getByText(/what challenges are you facing/i)).not.toBeNull();
+    
+    // Test the "No" option
+    fireEvent.click(screen.getByLabelText(/No/i));
+    
+    // Check that challenges section disappears
+    expect(screen.queryByText(/what challenges are you facing/i)).toBeNull();
+  });
 });

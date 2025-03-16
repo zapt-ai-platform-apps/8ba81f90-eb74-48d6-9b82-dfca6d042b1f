@@ -25,8 +25,8 @@ const SurveyStep2 = ({ surveyData, updateSurveyData, nextStep, prevStep }) => {
   ];
 
   const handleNeedsAppChange = (value) => {
-    // Convert string to boolean
-    const boolValue = value === 'true';
+    // Fix: Handle both boolean and string values correctly
+    const boolValue = typeof value === 'boolean' ? value : value === 'true';
     updateSurveyData({ needsApp: boolValue });
   };
 

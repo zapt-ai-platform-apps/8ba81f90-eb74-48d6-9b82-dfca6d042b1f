@@ -10,8 +10,8 @@ const SurveyStep4 = ({ surveyData, updateSurveyData, submitSurvey, prevStep, sub
   ];
 
   const handleConsultationChange = (value) => {
-    // Convert string to boolean
-    const boolValue = value === 'true';
+    // Fix: Handle both boolean and string values correctly
+    const boolValue = typeof value === 'boolean' ? value : value === 'true';
     updateSurveyData({ wantsConsultation: boolValue });
   };
 
